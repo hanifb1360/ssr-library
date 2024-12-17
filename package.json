@@ -1,0 +1,44 @@
+{
+  "name": "ssr-library",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "module": "src/index.mjs",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./src/index.js",
+      "import": "./src/index.mjs"
+    }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "echo 'No build step required for pure JavaScript.'",
+    "publish:dry-run": "npm publish --dry-run"
+  },
+  "keywords": [
+    "ssr",
+    "server-side rendering",
+    "component library",
+    "nodejs",
+    "html components",
+    "server-side components",
+    "javascript utilities"
+  ],
+  "author": "Hanif Bahari",
+  "license": "MIT",
+  "description": "A lightweight and flexible utility library for building and rendering server-side components in Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanifbahari/ssr-library"
+  },
+  "bugs": {
+    "url": "https://github.com/hanifbahari/ssr-library/issues"
+  },
+  "homepage": "https://github.com/hanifbahari/ssr-library#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
