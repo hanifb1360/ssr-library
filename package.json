@@ -1,13 +1,13 @@
 {
   "name": "ssr-library",
-  "version": "1.0.0",
-  "main": "src/index.js",
-  "module": "src/index.mjs",
+  "version": "1.1.0",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "type": "commonjs",
   "exports": {
     ".": {
-      "require": "./src/index.js",
-      "import": "./src/index.mjs"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "directories": {
@@ -15,7 +15,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "echo 'No build step required for pure JavaScript.'",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && mkdir dist && cp -r src/* dist/",
     "publish:dry-run": "npm publish --dry-run"
   },
   "keywords": [
@@ -39,6 +40,10 @@
   },
   "homepage": "https://github.com/hanifbahari/ssr-library#readme",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
   }
 }

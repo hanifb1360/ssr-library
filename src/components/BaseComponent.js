@@ -1,4 +1,4 @@
-const { renderTemplate } = require("./utils/templateRenderer");
+const { renderTemplate } = require("../utils/templateRenderer");
 
 class BaseComponent {
   constructor(props = {}) {
