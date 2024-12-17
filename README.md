@@ -18,6 +18,7 @@
 - **Virtual DOM Diffing**: Optimize updates by comparing old and new HTML using `diffDOM`.
 - **Express.js Middleware**: Easily integrate SSR into Express apps.
 - **Lightweight & Framework-Agnostic**: Designed to be minimal, flexible, and compatible with any Node.js project.
+- **TypeScript Support**: Built-in type definitions (`index.d.ts`) for seamless integration with TypeScript projects.
 
 ---
 
