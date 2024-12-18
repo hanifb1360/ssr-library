@@ -1,13 +1,14 @@
 {
   "name": "ssr-library",
-  "version": "1.1.1",
+  "version": "1.1.4",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "types": "./types/index.d.ts"
     }
   },
   "directories": {
@@ -15,8 +16,8 @@
   },
   "scripts": {
     "test": "jest",
-    "clean": "rm -rf dist",
-    "build": "npm run clean && mkdir dist && cp -r src/* dist/",
+    "clean": "rimraf dist",
+    "build": "npm run clean && mkdir dist && cp -r src/* dist/ && cp -r types dist/",
     "publish:dry-run": "npm publish --dry-run"
   },
   "keywords": [
@@ -41,6 +42,7 @@
   "homepage": "https://github.com/hanifbahari/ssr-library#readme",
   "devDependencies": {
     "jest": "^29.7.0",
+    "rimraf": "^6.0.1",
     "supertest": "^7.0.0"
   },
   "dependencies": {
