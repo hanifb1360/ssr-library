@@ -1,6 +1,6 @@
 {
   "name": "ssr-library",
-  "version": "1.1.4",
+  "version": "2.0.0",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -39,7 +39,7 @@
   "description": "A dependency-free TypeScript toolkit for safely building and rendering server-side HTML components in Node.js.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hanifb1360/ssr-library.git"
+    "url": "git+https://github.com/hanifb1360/ssr-library.git"
   },
   "bugs": {
     "url": "https://github.com/hanifb1360/ssr-library/issues"
