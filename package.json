@@ -18,7 +18,10 @@
     "build:cjs": "esbuild src/index.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/index.cjs",
     "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs",
     "test": "npm run build && node --test",
-    "publish:dry-run": "npm publish --dry-run"
+    "publish:dry-run": "npm publish --dry-run",
+    "test:coverage": "npm run build && node --test --experimental-test-coverage --test-coverage-include=dist/index.cjs --test-coverage-lines=90 --test-coverage-branches=90 --test-coverage-functions=95",
+    "test:consumer": "npm run build && node scripts/consumer-check.mjs",
+    "prepack": "npm run build"
   },
   "keywords": [
     "ssr",
