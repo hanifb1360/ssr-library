@@ -3,24 +3,23 @@ const assert = require("node:assert/strict");
 
 const library = require("../src");
 
-test("public API exposes the expected v1 functionality", () => {
+test("public API exposes the expected v2 functionality", () => {
   const expectedExports = [
     "BaseComponent",
-    "renderToHTML",
-    "propsToAttributes",
-    "cache",
-    "diffDOM",
-    "renderWithDiff",
-    "LayoutComponent",
     "ConditionalComponent",
-    "escapeHTML",
-    "rawHTML",
+    "LayoutComponent",
     "SSRCache",
+    "cache",
     "createCache",
-    "ssrMiddleware",
-  ];
+    "escapeHTML",
+    "propsToAttributes",
+    "rawHTML",
+    "renderToHTML",
+    "ssrMiddleware"
+  ].sort();
 
-  for (const name of expectedExports) {
-    assert.ok(name in library, `Expected public export "${name}"`);
-  }
+  assert.deepEqual(
+    Object.keys(library).sort(),
+    expectedExports
+  );
 });

@@ -15,14 +15,8 @@ const {
 } = require("../src/utils/html");
 
 const {
-  diffDOM,
-  renderWithDiff
-} = require("../src/utils/virtualDOM");
-
-const {
   createCache
 } = require("../src/utils/cache");
-const BaseComponent = require("../src/components/BaseComponent");
 
 test("escapeHTML escapes HTML special characters", () => {
   assert.equal(
@@ -124,41 +118,6 @@ test("propsToAttributes rejects invalid attribute names", () => {
     /Invalid HTML attribute name/
   );
 });
-
-test("diffDOM returns null when HTML is unchanged", () => {
-  assert.equal(
-    diffDOM("<p>Hello</p>", "<p>Hello</p>"),
-    null
-  );
-});
-
-test("diffDOM returns new HTML when content changes", () => {
-  assert.equal(
-    diffDOM("<p>Old</p>", "<p>New</p>"),
-    "<p>New</p>"
-  );
-});
-
-test("renderWithDiff keeps previous HTML when unchanged", () => {
-  const result = renderWithDiff(
-    () => "<p>Hello</p>",
-    "<p>Hello</p>",
-    {}
-  );
-
-  assert.equal(result, "<p>Hello</p>");
-});
-
-test("renderWithDiff returns new HTML when changed", () => {
-  const result = renderWithDiff(
-    (props) => `<p>${props.message}</p>`,
-    "<p>Old</p>",
-    { message: "New" }
-  );
-
-  assert.equal(result, "<p>New</p>");
-});
-
 
 test("cache stores and retrieves values by explicit key", () => {
   const cache = createCache();

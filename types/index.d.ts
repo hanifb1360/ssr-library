@@ -76,19 +76,6 @@ export declare function propsToAttributes(
   props?: Record<string, unknown>
 ): string;
 
-export declare function diffDOM(
-  oldHTML: string,
-  newHTML: string
-): string | null;
-
-export declare function renderWithDiff(
-  renderFunc: (
-    props?: unknown
-  ) => string,
-  previousHTML: string,
-  props?: unknown
-): string;
-
 export declare class LayoutComponent
   extends BaseComponent {}
 

@@ -16,11 +16,6 @@ const {
 } = require("./utils/cache");
 
 const {
-  diffDOM,
-  renderWithDiff
-} = require("./utils/virtualDOM");
-
-const {
   escapeHTML,
   rawHTML
 } = require("./utils/html");
@@ -42,8 +37,6 @@ module.exports = {
   SSRCache,
   createCache,
   cache,
-  diffDOM,
-  renderWithDiff,
   escapeHTML,
   rawHTML,
   LayoutComponent,
