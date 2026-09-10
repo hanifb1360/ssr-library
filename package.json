@@ -26,15 +26,17 @@
   "keywords": [
     "ssr",
     "server-side rendering",
-    "component library",
+    "typescript",
+    "html",
+    "components",
+    "templating",
     "nodejs",
-    "html components",
-    "server-side components",
-    "javascript utilities"
+    "esm",
+    "commonjs"
   ],
   "author": "Hanif Bahari",
   "license": "MIT",
-  "description": "A lightweight and flexible utility library for building and rendering server-side components in Node.js.",
+  "description": "A dependency-free TypeScript toolkit for safely building and rendering server-side HTML components in Node.js.",
   "repository": {
     "type": "git",
     "url": "https://github.com/hanifb1360/ssr-library.git"
@@ -48,7 +50,10 @@
     "typescript": "^7.0.2"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "engines": {
