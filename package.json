@@ -1,21 +1,23 @@
 {
   "name": "ssr-library",
   "version": "1.1.4",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "types/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "types": "./types/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
-  "directories": {},
   "scripts": {
-    "test": "node --test",
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
-    "build": "npm run clean && mkdir dist && cp -r src/* dist/ && cp -r types dist/",
+    "build:types": "tsc -p tsconfig.json",
+    "build:esm": "esbuild src/index.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/index.mjs",
+    "build:cjs": "esbuild src/index.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/index.cjs",
+    "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs",
+    "test": "npm run build && node --test",
     "publish:dry-run": "npm publish --dry-run"
   },
   "keywords": [
@@ -32,10 +34,21 @@
   "description": "A lightweight and flexible utility library for building and rendering server-side components in Node.js.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hanifbahari/ssr-library"
+    "url": "https://github.com/hanifb1360/ssr-library.git"
   },
   "bugs": {
-    "url": "https://github.com/hanifbahari/ssr-library/issues"
+    "url": "https://github.com/hanifb1360/ssr-library/issues"
   },
-  "homepage": "https://github.com/hanifbahari/ssr-library#readme"
+  "homepage": "https://github.com/hanifb1360/ssr-library#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  }
 }

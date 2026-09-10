@@ -1,9 +1,15 @@
-const { escapeHTML } = require("./html");
+import {
+  escapeHTML
+} from "./html.js";
 
 const ATTRIBUTE_NAME_PATTERN =
   /^[A-Za-z_:][A-Za-z0-9:._-]*$/;
 
-function propsToAttributes(props = {}) {
+export type AttributeValue = unknown;
+
+export function propsToAttributes(
+  props: Record<string, AttributeValue> = {}
+): string {
   if (
     props === null ||
     typeof props !== "object" ||
@@ -16,7 +22,9 @@ function propsToAttributes(props = {}) {
 
   return Object.entries(props)
     .flatMap(([key, value]) => {
-      if (!ATTRIBUTE_NAME_PATTERN.test(key)) {
+      if (
+        !ATTRIBUTE_NAME_PATTERN.test(key)
+      ) {
         throw new TypeError(
           `Invalid HTML attribute name: ${key}`
         );
@@ -40,5 +48,3 @@ function propsToAttributes(props = {}) {
     })
     .join(" ");
 }
-
-module.exports = { propsToAttributes };

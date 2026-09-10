@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const library = require("../src");
+const library = require("..");
 
 test("public API exposes the expected v2 functionality", () => {
   const expectedExports = [
@@ -14,6 +14,7 @@ test("public API exposes the expected v2 functionality", () => {
     "escapeHTML",
     "propsToAttributes",
     "rawHTML",
+    "renderTemplate",
     "renderToHTML",
     "ssrMiddleware"
   ].sort();

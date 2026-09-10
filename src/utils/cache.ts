@@ -1,5 +1,21 @@
-class SSRCache {
-  constructor(options = {}) {
+export interface CacheOptions {
+  maxEntries?: number;
+  ttl?: number;
+}
+
+interface CacheEntry {
+  value: string;
+  expiresAt: number | null;
+}
+
+export class SSRCache {
+  readonly maxEntries: number;
+  readonly ttl: number;
+
+  private readonly entries =
+    new Map<string, CacheEntry>();
+
+  constructor(options: CacheOptions = {}) {
     const {
       maxEntries = 100,
       ttl = 0
@@ -26,10 +42,9 @@ class SSRCache {
 
     this.maxEntries = maxEntries;
     this.ttl = ttl;
-    this.entries = new Map();
   }
 
-  get(key) {
+  get(key: string): string | undefined {
     this.validateKey(key);
 
     const entry = this.entries.get(key);
@@ -46,14 +61,13 @@ class SSRCache {
       return undefined;
     }
 
-    // Refresh insertion order for LRU behavior.
     this.entries.delete(key);
     this.entries.set(key, entry);
 
     return entry.value;
   }
 
-  set(key, value) {
+  set(key: string, value: string): void {
     this.validateKey(key);
 
     if (typeof value !== "string") {
@@ -76,36 +90,46 @@ class SSRCache {
           : Date.now() + this.ttl
     });
 
-    while (this.entries.size > this.maxEntries) {
-      const oldestKey =
-        this.entries.keys().next().value;
+    while (
+      this.entries.size >
+      this.maxEntries
+    ) {
+      const oldest =
+        this.entries.keys().next();
 
-      this.entries.delete(oldestKey);
+      if (oldest.done) {
+        break;
+      }
+
+      this.entries.delete(oldest.value);
     }
   }
 
-  has(key) {
+  has(key: string): boolean {
     return this.get(key) !== undefined;
   }
 
-  delete(key) {
+  delete(key: string): boolean {
     this.validateKey(key);
     return this.entries.delete(key);
   }
 
-  clear() {
+  clear(): void {
     this.entries.clear();
   }
 
-  get size() {
+  get size(): number {
     this.purgeExpired();
     return this.entries.size;
   }
 
-  purgeExpired() {
+  private purgeExpired(): void {
     const now = Date.now();
 
-    for (const [key, entry] of this.entries) {
+    for (
+      const [key, entry]
+      of this.entries
+    ) {
       if (
         entry.expiresAt !== null &&
         entry.expiresAt <= now
@@ -115,7 +139,9 @@ class SSRCache {
     }
   }
 
-  validateKey(key) {
+  private validateKey(
+    key: unknown
+  ): asserts key is string {
     if (typeof key !== "string") {
       throw new TypeError(
         "Cache keys must be strings."
@@ -124,16 +150,10 @@ class SSRCache {
   }
 }
 
-function createCache(options) {
+export function createCache(
+  options?: CacheOptions
+): SSRCache {
   return new SSRCache(options);
 }
 
-// Kept as a convenient shared cache, but renderToHTML
-// does not use it unless explicitly requested.
-const cache = createCache();
-
-module.exports = {
-  SSRCache,
-  createCache,
-  cache
-};
+export const cache = createCache();

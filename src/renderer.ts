@@ -1,4 +1,26 @@
-function renderToHTML(component, options = {}) {
+export interface Renderable {
+  render(): string;
+}
+
+export interface HTMLCache {
+  get(key: string):
+    string | undefined;
+
+  set(
+    key: string,
+    value: string
+  ): void;
+}
+
+export interface RenderToHTMLOptions {
+  cache?: HTMLCache;
+  cacheKey?: string;
+}
+
+export function renderToHTML(
+  component: Renderable,
+  options: RenderToHTMLOptions = {}
+): string {
   if (
     !component ||
     typeof component.render !== "function"
@@ -23,6 +45,13 @@ function renderToHTML(component, options = {}) {
     cacheKey
   } = options;
 
+  let resolvedCache:
+    | {
+        cache: HTMLCache;
+        key: string;
+      }
+    | undefined;
+
   if (cache !== undefined) {
     if (
       !cache ||
@@ -40,7 +69,15 @@ function renderToHTML(component, options = {}) {
       );
     }
 
-    const cachedOutput = cache.get(cacheKey);
+    resolvedCache = {
+      cache,
+      key: cacheKey
+    };
+
+    const cachedOutput =
+      resolvedCache.cache.get(
+        resolvedCache.key
+      );
 
     if (cachedOutput !== undefined) {
       return cachedOutput;
@@ -51,11 +88,11 @@ function renderToHTML(component, options = {}) {
     );
   }
 
-  let output;
+  let output: string;
 
   try {
     output = component.render();
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof Error) {
       throw error;
     }
@@ -71,11 +108,12 @@ function renderToHTML(component, options = {}) {
     );
   }
 
-  if (cache !== undefined) {
-    cache.set(cacheKey, output);
+  if (resolvedCache !== undefined) {
+    resolvedCache.cache.set(
+      resolvedCache.key,
+      output
+    );
   }
 
   return output;
 }
-
-module.exports = { renderToHTML };

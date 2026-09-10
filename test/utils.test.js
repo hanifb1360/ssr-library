@@ -2,21 +2,12 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
-  renderTemplate
-} = require("../src/utils/templateRenderer");
-
-const {
-  propsToAttributes
-} = require("../src/utils/propsToAttributes");
-
-const {
+  createCache,
   escapeHTML,
-  rawHTML
-} = require("../src/utils/html");
-
-const {
-  createCache
-} = require("../src/utils/cache");
+  propsToAttributes,
+  rawHTML,
+  renderTemplate
+} = require("..");
 
 test("escapeHTML escapes HTML special characters", () => {
   assert.equal(

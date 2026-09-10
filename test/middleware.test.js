@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { ssrMiddleware } = require("../src/middleware/expressMiddleware");
+const { ssrMiddleware } = require("..");
 
 test("ssrMiddleware sends generated HTML", () => {
   let responseBody;

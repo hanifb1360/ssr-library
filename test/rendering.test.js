@@ -1,16 +1,11 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const BaseComponent =
-  require("../src/components/BaseComponent");
-
 const {
+  BaseComponent,
+  createCache,
   renderToHTML
-} = require("../src/renderer");
-
-const {
-  createCache
-} = require("../src/utils/cache");
+} = require("..");
 
 test("renderToHTML renders a component", () => {
   class Greeting extends BaseComponent {

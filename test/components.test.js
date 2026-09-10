@@ -1,18 +1,12 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const BaseComponent =
-  require("../src/components/BaseComponent");
-
-const ConditionalComponent =
-  require("../src/components/ConditionalComponent");
-
-const LayoutComponent =
-  require("../src/components/LayoutComponent");
-
 const {
+  BaseComponent,
+  ConditionalComponent,
+  LayoutComponent,
   rawHTML
-} = require("../src/utils/html");
+} = require("..");
 
 test("BaseComponent stores props", () => {
   const component =
