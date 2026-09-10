@@ -15,6 +15,8 @@ test("public API exposes the expected v1 functionality", () => {
     "ConditionalComponent",
     "escapeHTML",
     "rawHTML",
+    "SSRCache",
+    "createCache",
     "ssrMiddleware",
   ];
 

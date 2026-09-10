@@ -13,50 +13,106 @@ export declare function rawHTML(
   value: unknown
 ): RawHTML;
 
-// BaseComponent
-declare const rawHTMLBrand: unique symbol;
+export declare class BaseComponent {
+  constructor(
+    props?: Record<string, unknown>
+  );
 
-export interface RawHTML {
-  readonly value: string;
-  readonly [rawHTMLBrand]: true;
+  props: Record<string, unknown>;
+  children: BaseComponent[];
+
+  setChildren(
+    children: BaseComponent[]
+  ): void;
+
+  render(): string;
+
+  renderTemplate(
+    template: string
+  ): string;
 }
 
-export declare function escapeHTML(
-  value: unknown
+export interface CacheOptions {
+  maxEntries?: number;
+  ttl?: number;
+}
+
+export declare class SSRCache {
+  constructor(options?: CacheOptions);
+
+  get(key: string): string | undefined;
+
+  set(
+    key: string,
+    value: string
+  ): void;
+
+  has(key: string): boolean;
+
+  delete(key: string): boolean;
+
+  clear(): void;
+
+  readonly size: number;
+}
+
+export declare function createCache(
+  options?: CacheOptions
+): SSRCache;
+
+export declare const cache: SSRCache;
+
+export interface RenderToHTMLOptions {
+  cache?: SSRCache;
+  cacheKey?: string;
+}
+
+export declare function renderToHTML(
+  component: BaseComponent,
+  options?: RenderToHTMLOptions
 ): string;
 
-export declare function rawHTML(
-  value: unknown
-): RawHTML;
+export declare function propsToAttributes(
+  props?: Record<string, unknown>
+): string;
 
-export declare class BaseComponent {
-    constructor(props?: Record<string, any>);
-    props: Record<string, any>;
-    children: BaseComponent[];
-  
-    setChildren(children: BaseComponent[]): void;
-    render(): string;
-    renderTemplate(template: string): string;
-  }
-  
-  // Utilities
-  export declare function renderToHTML(component: BaseComponent): string;
-  export declare function propsToAttributes(props: Record<string, any>): string;
-  
-  // Caching
-  export declare const cache: {
-    get(component: BaseComponent, props: Record<string, any>): string | undefined;
-    set(component: BaseComponent, props: Record<string, any>, output: string): void;
-    clear(): void;
-  };
-  
-  // Virtual DOM
-  export declare function diffDOM(oldHTML: string, newHTML: string): string | null;
-  export declare function renderWithDiff(renderFunc: () => string, previousHTML: string): string;
-  
-  // Components
-  export declare class LayoutComponent extends BaseComponent {}
-  export declare class ConditionalComponent extends BaseComponent {}
-  
-  // Middleware
-  export declare function ssrMiddleware(renderFn: () => string): any;
+export declare function diffDOM(
+  oldHTML: string,
+  newHTML: string
+): string | null;
+
+export declare function renderWithDiff(
+  renderFunc: (
+    props?: unknown
+  ) => string,
+  previousHTML: string,
+  props?: unknown
+): string;
+
+export declare class LayoutComponent
+  extends BaseComponent {}
+
+export declare class ConditionalComponent
+  extends BaseComponent {}
+
+export interface SSRResponse {
+  send(html: string): unknown;
+}
+
+export type SSRNextFunction = (
+  error?: unknown
+) => unknown;
+
+export type SSRRenderFunction<Request = unknown> = (
+  request: Request
+) => string | Promise<string>;
+
+export declare function ssrMiddleware<
+  Request = unknown
+>(
+  renderFn: SSRRenderFunction<Request>
+): (
+  req: Request,
+  res: SSRResponse,
+  next?: SSRNextFunction
+) => unknown | Promise<unknown>;

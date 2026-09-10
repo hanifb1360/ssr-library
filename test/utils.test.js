@@ -19,7 +19,9 @@ const {
   renderWithDiff
 } = require("../src/utils/virtualDOM");
 
-const cache = require("../src/utils/cache");
+const {
+  createCache
+} = require("../src/utils/cache");
 const BaseComponent = require("../src/components/BaseComponent");
 
 test("escapeHTML escapes HTML special characters", () => {
@@ -157,28 +159,117 @@ test("renderWithDiff returns new HTML when changed", () => {
   assert.equal(result, "<p>New</p>");
 });
 
-test("cache stores and retrieves rendered output", () => {
-  class Example extends BaseComponent {}
 
-  const component = new Example({ id: 1 });
+test("cache stores and retrieves values by explicit key", () => {
+  const cache = createCache();
 
-  cache.clear();
-
-  cache.set(
-    component,
-    component.props,
-    "<p>Cached</p>"
-  );
+  cache.set("page:1", "<p>Cached</p>");
 
   assert.equal(
-    cache.get(component, component.props),
+    cache.get("page:1"),
     "<p>Cached</p>"
   );
+
+  assert.equal(cache.size, 1);
 
   cache.clear();
 
   assert.equal(
-    cache.get(component, component.props),
+    cache.get("page:1"),
     undefined
   );
+});
+
+test("cache evicts the least recently used entry", () => {
+  const cache = createCache({
+    maxEntries: 2
+  });
+
+  cache.set("a", "A");
+  cache.set("b", "B");
+
+  // Accessing a makes b the least recently used.
+  assert.equal(cache.get("a"), "A");
+
+  cache.set("c", "C");
+
+  assert.equal(cache.get("a"), "A");
+  assert.equal(cache.get("b"), undefined);
+  assert.equal(cache.get("c"), "C");
+  assert.equal(cache.size, 2);
+});
+
+test("cache expires values after TTL", () => {
+  const originalNow = Date.now;
+  let now = 1000;
+
+  Date.now = () => now;
+
+  try {
+    const cache = createCache({
+      ttl: 50
+    });
+
+    cache.set("page", "<p>Hello</p>");
+
+    assert.equal(
+      cache.get("page"),
+      "<p>Hello</p>"
+    );
+
+    now = 1049;
+
+    assert.equal(
+      cache.get("page"),
+      "<p>Hello</p>"
+    );
+
+    now = 1050;
+
+    assert.equal(
+      cache.get("page"),
+      undefined
+    );
+
+    assert.equal(cache.size, 0);
+  } finally {
+    Date.now = originalNow;
+  }
+});
+
+test("cache delete removes an entry", () => {
+  const cache = createCache();
+
+  cache.set("page", "<p>Hello</p>");
+
+  assert.equal(
+    cache.delete("page"),
+    true
+  );
+
+  assert.equal(
+    cache.get("page"),
+    undefined
+  );
+});
+
+test("cache validates its configuration", () => {
+  assert.throws(
+    () => createCache({ maxEntries: 0 }),
+    /positive integer/
+  );
+
+  assert.throws(
+    () => createCache({ ttl: -1 }),
+    /non-negative finite number/
+  );
+});
+
+test("cache accepts empty string values", () => {
+  const cache = createCache();
+
+  cache.set("empty", "");
+
+  assert.equal(cache.has("empty"), true);
+  assert.equal(cache.get("empty"), "");
 });

@@ -1,29 +1,79 @@
-const cache = require("./utils/cache");
-
-function renderToHTML(component) {
-  // Validate the component and its render method
-  if (!component || typeof component.render !== "function") {
-    throw new Error("Invalid component. Must implement a render method.");
+function renderToHTML(component, options = {}) {
+  if (
+    !component ||
+    typeof component.render !== "function"
+  ) {
+    throw new Error(
+      "Invalid component. Must implement a render method."
+    );
   }
 
-  // Check if a cached output already exists
-  const cachedOutput = cache.get(component, component.props);
-  if (cachedOutput) return cachedOutput;
+  if (
+    options === null ||
+    typeof options !== "object" ||
+    Array.isArray(options)
+  ) {
+    throw new TypeError(
+      "renderToHTML options must be an object."
+    );
+  }
 
-  // Call render and validate the output
+  const {
+    cache,
+    cacheKey
+  } = options;
+
+  if (cache !== undefined) {
+    if (
+      !cache ||
+      typeof cache.get !== "function" ||
+      typeof cache.set !== "function"
+    ) {
+      throw new TypeError(
+        "renderToHTML cache must implement get and set."
+      );
+    }
+
+    if (typeof cacheKey !== "string") {
+      throw new TypeError(
+        "cacheKey is required when caching is enabled."
+      );
+    }
+
+    const cachedOutput = cache.get(cacheKey);
+
+    if (cachedOutput !== undefined) {
+      return cachedOutput;
+    }
+  } else if (cacheKey !== undefined) {
+    throw new TypeError(
+      "cacheKey requires a cache."
+    );
+  }
+
   let output;
+
   try {
     output = component.render();
-    if (typeof output !== "string") {
-      throw new Error("Render method must return a string.");
-    }
   } catch (error) {
-    // Explicitly re-throw the error if render fails
-    throw new Error(error.message || "Render method encountered an error.");
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error(
+      "Render method encountered an error."
+    );
   }
 
-  // Cache the output for future use
-  cache.set(component, component.props, output);
+  if (typeof output !== "string") {
+    throw new TypeError(
+      "Render method must return a string."
+    );
+  }
+
+  if (cache !== undefined) {
+    cache.set(cacheKey, output);
+  }
 
   return output;
 }
