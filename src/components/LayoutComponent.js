@@ -1,20 +1,28 @@
 const BaseComponent = require("./BaseComponent");
+const {
+  renderTemplate
+} = require("../utils/templateRenderer");
 
 class LayoutComponent extends BaseComponent {
   render() {
-    const content = this.props.content || "";
-    return `
+    return renderTemplate(
+      `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
-        <title>${this.props.title || "SSR App"}</title>
+        <title>{{title}}</title>
       </head>
       <body>
-        ${content}
+        {{content}}
       </body>
       </html>
-    `;
+    `,
+      {
+        title: this.props.title ?? "SSR App",
+        content: this.props.content ?? ""
+      }
+    );
   }
 }
 

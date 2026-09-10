@@ -6,6 +6,7 @@ const { renderToHTML } = require("./renderer");
 const { propsToAttributes } = require("./utils/propsToAttributes");
 const cache = require("./utils/cache");
 const { diffDOM, renderWithDiff } = require("./utils/virtualDOM");
+const { escapeHTML, rawHTML } = require("./utils/html");
 
 // Components for advanced features
 const LayoutComponent = require("./components/LayoutComponent");
@@ -18,18 +19,20 @@ const { ssrMiddleware } = require("./middleware/expressMiddleware");
 module.exports = {
   // Core classes
   BaseComponent,
+  escapeHTML,
+  rawHTML,
 
   // Utilities
   renderToHTML,
   propsToAttributes,
-  cache,            // Server-side caching utility
-  diffDOM,          // Virtual DOM diffing utility
-  renderWithDiff,   // Optimized rendering with Virtual DOM
+  cache, // Server-side caching utility
+  diffDOM, // Virtual DOM diffing utility
+  renderWithDiff, // Optimized rendering with Virtual DOM
 
   // Advanced Components
-  LayoutComponent,       // Layout support
-  ConditionalComponent,  // Conditional rendering support
+  LayoutComponent, // Layout support
+  ConditionalComponent, // Conditional rendering support
 
   // Middleware
-  ssrMiddleware,    // Express.js middleware
+  ssrMiddleware, // Express.js middleware
 };

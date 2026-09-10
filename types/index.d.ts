@@ -1,4 +1,34 @@
+declare const rawHTMLBrand: unique symbol;
+
+export interface RawHTML {
+  readonly value: string;
+  readonly [rawHTMLBrand]: true;
+}
+
+export declare function escapeHTML(
+  value: unknown
+): string;
+
+export declare function rawHTML(
+  value: unknown
+): RawHTML;
+
 // BaseComponent
+declare const rawHTMLBrand: unique symbol;
+
+export interface RawHTML {
+  readonly value: string;
+  readonly [rawHTMLBrand]: true;
+}
+
+export declare function escapeHTML(
+  value: unknown
+): string;
+
+export declare function rawHTML(
+  value: unknown
+): RawHTML;
+
 export declare class BaseComponent {
     constructor(props?: Record<string, any>);
     props: Record<string, any>;

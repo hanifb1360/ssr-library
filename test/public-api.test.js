@@ -13,13 +13,12 @@ test("public API exposes the expected v1 functionality", () => {
     "renderWithDiff",
     "LayoutComponent",
     "ConditionalComponent",
-    "ssrMiddleware"
+    "escapeHTML",
+    "rawHTML",
+    "ssrMiddleware",
   ];
 
   for (const name of expectedExports) {
-    assert.ok(
-      name in library,
-      `Expected public export "${name}"`
-    );
+    assert.ok(name in library, `Expected public export "${name}"`);
   }
 });
