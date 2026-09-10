@@ -37,8 +37,5 @@
   "bugs": {
     "url": "https://github.com/hanifbahari/ssr-library/issues"
   },
-  "homepage": "https://github.com/hanifbahari/ssr-library#readme",
-  "dependencies": {
-    "express": "^4.21.2"
-  }
+  "homepage": "https://github.com/hanifbahari/ssr-library#readme"
 }
